@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+<title>{% block title%}update post{% endblock%}</title>
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.id == post.author.id %}      
+        <h1>Update Blog Post</h1>
+        <br>
+        <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {{form.media}}
+            {{form.as_p}}
+            <button class="btn btn-secondary">Update</button>
+            <a href="{% url 'delete_post' post.pk %}" class="btn btn-danger">Delete</a>
+        </form>
+        <br>
+        <br>
+        </div>
+    {% else %}
+    You are not allowed here ! you have to login first
+    {% endif %}
+    {% else %}
+You are not allowed here ! you have to login first
+{% endif %}
+{% endblock%}

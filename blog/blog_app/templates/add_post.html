@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+<title>{% block title%}add post{% endblock%}</title>
+
+{% block content %}
+{% if user.is_authenticated %}
+
+    <h1>Add Blog Post</h1>
+    <br>
+<div class="form-group">
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.media}}
+    {{form.as_p}}
+    <button class="btn btn-success"> post</button>
+    </form>
+</div>
+
+<script>
+    var name="{{ user.id }}";
+    document.getElementById('author_input').value=name;
+</script>
+{% else %}
+You are not allowed here ! you have to login first
+{% endif %}
+{% endblock%}

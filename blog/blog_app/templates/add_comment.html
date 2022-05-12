@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+<title>{% block title%}add comment{% endblock%}</title>
+
+{% block content %}
+        <h1>Add Comment</h1>
+        <br>
+        <div class="form-group">
+            <form method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-success btn-publish">Publish</button>
+            </form>
+            <br>
+            
+        </div>
+{% endblock %}

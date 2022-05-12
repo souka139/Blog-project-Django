@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+<title>{% block title%}{{post.title_tag}}{% endblock%}</title>
+
+{% block content %}
+    <main class="main pt-4">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9">
+              <article class="card mb-4">
+                <header class="card-header text-center">
+                  <div class="card-meta">
+                    <a href="#"><time class="timeago" datetime="2021-09-26 20:00">{{post.post_date}}</time></a> in <a href="{% url 'category' post.category|slugify  %}">{{post.category}}</a>
+                  </div>
+                    <h1 class="card-title">{{post.title}}</h1>
+                </header>
+                {% if post.header_img %}
+                  <img class="card-img" src="{{ post.header_img.url }}" alt="" />
+                {% endif %}
+                <div class="card-body">
+                    <p>{{post.body|safe}}</p>
+                  {% if user.is_authenticated %}
+                    <div class="d-flex justify-content-between">
+                      <form action="{% url 'like_post' post.pk %}" method="post">
+                          {% csrf_token %}
+                          {% if liked %}
+                            <button type="submit" name="post_id" value="{{post.id}}" class="btn-unlike"><i class="fas fa-heart"></i></button>
+                          {% else %}
+                            <button type="submit" name="post_id" value="{{post.id}}" class="btn-like"><i class="far fa-heart"></i></button>
+                          {% endif %}
+                      
+                          - {{total_likes}} Likes
+                      </form>
+                    {% if user.id == post.author.id %}
+                      <div class="u-d-btns">
+                        <a href="{% url 'update_post' post.pk %}"><i class="fas fa-pen"></i> edit</a>&nbsp;
+                        <a href="{% url 'delete_post' post.pk %}"><i class="fas fa-trash-alt"></i> delete</a>
+                      </div>
+                    {% endif %}
+                    </div>
+                  {% endif %}
+
+                  <br>
+                  
+                        
+              <h3 class="comments">Comments</h3>
+               
+                  {% if not post.comments.all %}
+                      <small>No Comments yet... <a href="{% url 'add_comment' post.id %}">be the first commenting</a></small> 
+                  {% else %}
+                        <a href="{% url 'add_comment' post.id %}">Add a comment</a>
+                        {% for comment in post.comments.all %}
+                            <div class="d-flex mb-3 p-3 bg-light comment-section">
+                                <div class="">
+                                  <h6 class="mt-1 mb-0 me-3">{{ comment.name }}</h6>
+                                  <div class="flex-grow-1 d-block">
+                                    <p class="mt-3 mb-2">{{comment.body}}</p>
+                                    <time class="timeago text-muted" datetime="2021-09-03 20:00">{{comment.date_added}}</time>
+                                  </div>
+                                </div>
+                               
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+              </article>
+          
+            </div>
+            
+            <div class="col-md-3 ms-auto">
+    
+              <aside class="sidebar">
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h4>Bio</h4>
+                    {%if post.author.profile.bio %}
+                    <p class="card-text">{{ post.author.profile.bio }}</p>
+                    {% else %}
+                    <p class="card-text">Nothing to show here.</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </aside>
+    
+              <aside class="sidebar sidebar-sticky">
+                <div class="card mb-4 profile">
+                  <div class="card-body">
+                    <h4>Profile</h4>
+                    <div class="profile_pic_div">
+                      {% if post.author.profile.profile_pic %}
+                      <img class="card-img mt-3 profile_pic" src="{{ post.author.profile.profile_pic.url }}" alt="" />
+                      {% else %}
+                     <img class="card-img mt-3 profile_pic" src="{% static 'blog_app/images/avatar-neutre900.jpg' %}" alt="" />
+                      {% endif %}
+                      <h6 class="mt-3">{{ post.author.first_name }} {{ post.author.last_name }}</h6>
+                      </div>
+                    <h4 class="mt-4">Social Media</h4>
+                    {% if post.author.profile.instagram_url %}<a class="btn btn-light btn-sm mb-1" href="{{ post.author.profile.instagram_url }}" target="_blank">Instagram</a>{% endif %}
+                    {% if post.author.profile.twitter_url %}<a class="btn btn-light btn-sm mb-1" href="{{ post.author.profile.twitter_url }}" target="_blank">Twitter</a>{% endif %}
+                    {% if post.author.profile.facebook_url %}<a class="btn btn-light btn-sm mb-1" href="{{ post.author.profile.facebook_url }}" target="_blank">Facebook</a>{% endif %}                  
+                    {% if post.author.profile.pinterest_url %}<a class="btn btn-light btn-sm mb-1" href="{{ post.author.profile.pinterest_url }}" target="_blank">Pinterest</a>{% endif %}
+                  </div>
+                </div>
+              </aside>
+    
+            </div>
+          </div>
+        </div>
+    
+      </main>
+    
+{% endblock%}

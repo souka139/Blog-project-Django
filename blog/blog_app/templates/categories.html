@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+<title>{% block title%}Categories{% endblock%}</title>
+
+{% block content %}
+
+{% if category_posts %}
+<div class="row">
+    <h1>{{ catgs }} Category</h1>
+    {% for post in category_posts %}
+    <div class="col-md-3">
+        <article class="card mb-4 my-3">
+            <header class="card-header">
+              <div class="card-meta">
+                <small> by : {{post.author}}</small><br>
+                <time class="timeago" datetime="2021-09-26 20:00">{{post.post_date}}</time></a> in <a href="{% url 'category' post.category|slugify  %}">{{post.category}}</a>
+              </div>
+              <a href="{% url 'article-detail' post.pk %}">
+                <h4 class="card-title"><a href="{% url 'article-detail' post.pk %}">{{post.title}}</a></h4>
+              </a>
+            </header>
+            <a href="{% url 'article-detail' post.pk %}">
+                {% if post.header_img %}
+              <img class="card-img home-post" src="{{ post.header_img.url }}" alt="" />
+              {% endif %}
+            </a>
+            <div class="card-body">
+              <p class="card-text">{{post.body|slice:":200"|safe}}</p>
+            </div>
+          </article>
+    </div>  
+    {% endfor %}
+</div>
+{%else%}
+
+<div class="img-empty d-flex justify-content-center align-items-center w-100">
+  <img src="https://i.pinimg.com/236x/ae/8a/c2/ae8ac2fa217d23aadcc913989fcc34a2.jpg" alt="" class="img-fluid">
+</div>
+{% endif %}
+
+{% endblock%}

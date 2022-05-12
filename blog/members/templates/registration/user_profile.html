@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+<title>{% block title%}Profile{% endblock%}</title>
+{% block content %}
+<div class="container">
+    <h1>User Profile</h1>
+<div class="card mb-3 mt-5">
+  <div class="row g-0">
+    <div class="col-md-3">
+      {% if page_user.profile_pic %}
+      <img class="img-fluid profile_pic" src="{{ page_user.profile_pic.url }}" alt="" />
+     {% else %} 
+     <img class="img-fluid profile_pic" src="{% static 'blog_app/images/avatar-neutre900.jpg' %}" alt="" />
+     {% endif %}
+    </div>
+    <div class="col-md-9">
+      <div class="card-body">
+        <h5 class="card-title">{{ page_user.user.first_name }} {{ page_user.user.last_name }}</h5>
+        {% if page_user.instagram_url %}<a class="btn btn-light btn-sm mb-1" href="{{ page_user.instagram_url }}" target="_blank">Instagram</a>{% endif %}
+        {% if page_user.twitter_url %}<a class="btn btn-light btn-sm mb-1" href="{{ page_user.twitter_url }}" target="_blank">Twitter</a>{% endif %}
+        {% if page_user.facebook_url %}<a class="btn btn-light btn-sm mb-1" href="{{ page_user.facebook_url }}" target="_blank">Facebook</a>{% endif %}                  
+        {% if page_user.pinterest_url %}<a class="btn btn-light btn-sm mb-1" href="{{ page_user.pinterest_url }}" target="_blank">Pinterest</a>{% endif %}
+        <p class="card-text">{{ page_user.bio }}</p>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>{% endblock%}
